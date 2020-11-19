@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <style>
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            margin: 0 0 0 0;
+            padding: 0;
+            background: #171a21;
+            color: white;
+        }
+
+        div#container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type=submit] {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            width: 100%;
+            padding: 5px 20px 5px 20px;
+        }
+
+        img {
+            width: 250px;
+            padding: 30px;
+        }
+
+        #headerTitle h1 {
+            color: white;
+        }
+
+        #header {
+            margin-bottom: 100px;
+            background: #00264d;
+            box-shadow: 0 0.125rem 0 0 rgba(7, 7, 33, .15);
+        }
+
+        #containerHeader {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        select {
+            width: 200px;
+            margin-bottom: 5px;
+            padding: 5px;
+        }
+
+        #container_json {
+            padding: 50px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Team Steam</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+<section id="header">
+    <div id="containerHeader">
+        <div id="img" onclick="">
+            <img src="{% static 'admin/img/logo_steam.svg' %}" alt="Steam-Logo">
+        </div>
+    </div>
+</section>
+<div id="container">
+    <div id="containerForm">
+
+        <form id="form_filter" action="{% url 'filterData' %}" method="get">
+            <select id="select" name="key">
+                {% for key in keys %}
+                    <option name="{{ key }}">{{ key }}</option>
+                {% endfor %}
+            </select><br>
+
+            <input type="submit">
+        </form>
+        <br>
+    </div>
+
+
+    <h1>Filtered on key: <span style="color: #004080">{{ filter }}</span></h1>
+</div>
+<div id="container_json">
+    <pre style="white-space: pre-wrap; word-break: keep-all;">{{ data }}</pre>
+</div>
+
+</body>
+</html>
