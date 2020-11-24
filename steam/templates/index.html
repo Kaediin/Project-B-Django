@@ -56,8 +56,8 @@
             padding: 5px;
         }
 
-        #container_json {
-            padding: 50px;
+        pre {
+            margin: 50px;
         }
     </style>
     <meta charset="UTF-8">
@@ -91,9 +91,29 @@
 
     <h1>Filtered on key: <span style="color: #004080">{{ filter }}</span></h1>
 </div>
-<div id="container_json">
-    <pre style="white-space: pre-wrap; word-break: keep-all;">{{ data }}</pre>
-</div>
+
 
 </body>
+<script>
+    var loader = 0
+    loadmore()
+
+    window.onscroll = function (ev) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            console.log(1)
+            loadmore()
+        }
+    }
+
+    function loadmore() {
+        var big_list = {{ data|safe }};
+        for (i = loader * 10; i < (loader * 10) + 10; i++) {
+            div = document.createElement("PRE")
+            div.innerHTML = JSON.stringify(big_list[i], null, 10)
+            document.body.appendChild(div)
+        }
+        loader++
+    }
+</script>
+
 </html>

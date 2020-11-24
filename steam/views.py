@@ -37,9 +37,10 @@ def sort(data_list, key):
 
 
 def index(request):
+    print(type(jsonData))
     return render(request, 'index.html', {
         'keys': keys,
-        'data': json.dumps(jsonData, indent=4),
+        'data': jsonData,
         'filter': 'none'
     })
 
@@ -48,10 +49,16 @@ def filter(request):
     key = request.GET.get('key')
     data = sort(jsonData, key)
     value = keys.index(key)
+    print(type(data))
 
     return render(request, 'index.html', {
         'keys': keys,
-        'data': json.dumps(data, indent=4),
+        'data': data,
         'filter': key,
         'option_value': value
     })
+
+
+def getDataAsDicts(data):
+    dicts = json.loads(data)
+    return dicts
