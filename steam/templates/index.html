@@ -28,7 +28,7 @@
             padding: 5px 20px 5px 20px;
         }
 
-        img {
+        #steam_logo {
             width: 250px;
             padding: 30px;
         }
@@ -59,7 +59,100 @@
         pre {
             margin: 50px;
             white-space: pre-wrap;
-            word-break: keep-all;"
+            word-break: keep-all;
+        }
+
+        .perItem {
+            border: 7px solid black;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 50px auto 50px auto;
+            width: 60%;
+        }
+
+        .dictitem {
+            margin: 0;
+            padding: 0;
+        }
+
+        .name {
+            font-size: xx-large;
+        }
+
+        .release_date {
+            opacity: 50%;
+            margin: 10px 0 10px 0;
+        }
+
+        .price {
+            color: darkgreen;
+            font-size: xx-large;
+        }
+
+        .platforms {
+            display: flex;
+            background: #3f475a;
+            border-radius: 5px;
+        }
+
+        .os_icon, .like_dislike_image {
+            width: 30px;
+            padding: 10px;
+            filter: invert(1);
+        }
+
+
+        .divNameId {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .div_bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .divLikeDislike {
+            display: flex;
+            align-items: center;
+        }
+
+        .positive_ratings {
+            color: darkgreen;
+        }
+
+        .negative_ratings {
+            color: darkred;
+        }
+
+        table{
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 4px solid #3f475a;
+            border-collapse: collapse;
+            padding: 10px;
+        }
+
+        .table_item{
+            padding: 10px;
+        }
+
+        .table_item div{
+            padding: 0;
+        }
+
+        .english_image{
+            width: 20px;
+        }
+        .div_english{
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
         }
     </style>
     <meta charset="UTF-8">
@@ -71,7 +164,7 @@
 <section id="header">
     <div id="containerHeader">
         <div id="img" onclick="">
-            <img src="{% static 'admin/img/logo_steam.svg' %}" alt="Steam-Logo">
+            <img id="steam_logo" src="{% static 'admin/img/logo_steam.svg' %}" alt="Steam-Logo">
         </div>
     </div>
 </section>
@@ -92,11 +185,21 @@
 
 
     <h1>Filtered on key: <span style="color: #004080">{{ filter }}</span></h1>
+    <h1>Item count: <span style="color: #004080">{{ data|length }}</span></h1>
 </div>
 
 
 </body>
 <script>
+
+    var select = document.getElementById('select')
+    var options = select.options;
+    for (var opt, j = 0; opt = options[j]; j++) {
+        if (opt.value === '{{ filter }}') {
+            select.selectedIndex = j;
+            break;
+        }
+    }
     var loader = 0
     loadmore()
 
@@ -110,8 +213,210 @@
     function loadmore() {
         var big_list = {{ data|safe }};
         for (i = loader * 10; i < (loader * 10) + 10; i++) {
-            div = document.createElement("PRE")
-            div.innerHTML = JSON.stringify(big_list[i], null, 10)
+            {#Declaring all elements#}
+            let [appid, name, release_date, developer, publisher, platforms, required_age, categories, genres, steamspy_tags, achievements, positive_ratings, negative_ratings, average_playtime, median_playtime, owners, price] =
+                [document.createElement("P"),
+                    document.createElement("P"),
+                    document.createElement("P"),
+                    document.createElement("TD"),
+                    document.createElement("TD"),
+                    document.createElement("TD"),
+                    document.createElement("TD"),
+                    document.createElement("TD"),
+                    document.createElement("TD"),
+                    document.createElement("TD"),
+                    document.createElement("TD"),
+                    document.createElement("P"),
+                    document.createElement("P"),
+                    document.createElement("TD"),
+                    document.createElement("TD"),
+                    document.createElement("TD"),
+                    document.createElement("P")]
+            let [div, divPlatformsPrice, divNameId, divLikeDislike, divEnglish, tableCenterItems] = [document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV"), document.createElement("DIV"), document.createElement("TABLE")]
+
+            tdDivEnglish = document.createElement("TD")
+
+            {#Adding values to elements#}
+            appid.innerText = "AppId: " + JSON.stringify(big_list[i]['appid'], null, 10)
+            name.innerText = JSON.stringify(big_list[i]['name'], null, 10).replace(/"([^"]+(?="))"/g, '$1');
+            release_date.innerText = JSON.stringify(big_list[i]['release_date'], null, 10).replace(/"([^"]+(?="))"/g, '$1');
+            developer.innerText = JSON.stringify(big_list[i]['developer'], null, 10).replace(/"([^"]+(?="))"/g, '$1');
+            publisher.innerText = JSON.stringify(big_list[i]['publisher'], null, 10).replace(/"([^"]+(?="))"/g, '$1');
+            englishInt = JSON.stringify(big_list[i]['english'], null, 10)
+            platformsString = big_list[i]['platforms']
+            required_age.innerText = JSON.stringify(big_list[i]['required_age'], null, 10) + "+"
+            categories.innerText = JSON.stringify(big_list[i]['categories'], null, 10).replace(/"([^"]+(?="))"/g, '$1').replaceAll(";", ', ');
+            genres.innerText = JSON.stringify(big_list[i]['genres'], null, 10).replace(/"([^"]+(?="))"/g, '$1');
+            steamspy_tags.innerText = JSON.stringify(big_list[i]['steamspy_tags'], null, 10).replace(/"([^"]+(?="))"/g, '$1').replaceAll(";", ', ');
+            achievements.innerText = JSON.stringify(big_list[i]['achievements'], null, 10)
+            positive_ratings.innerText = JSON.stringify(big_list[i]['positive_ratings'], null, 10)
+            negative_ratings.innerText = JSON.stringify(big_list[i]['negative_ratings'], null, 10)
+            average_playtime.innerText = JSON.stringify(big_list[i]['average_playtime'], null, 10)
+            median_playtime.innerText = JSON.stringify(big_list[i]['median_playtime'], null, 10)
+            owners.innerText = JSON.stringify(big_list[i]['owners'], null, 10).replace(/"([^"]+(?="))"/g, '$1');
+            price.innerText = "$" + JSON.stringify(big_list[i]['price'], null, 10)
+
+            {#Chooses which platforms should be listed#}
+            platformList = platformsString.split(';')
+            platformList.forEach(val => {
+
+                if (val === "windows") {
+                    platformImage = document.createElement("img");
+                    platformImage.src = '{% static 'admin/img/windows.svg' %}'
+                    platformImage.alt = 'windows'
+                } else if (val === "mac") {
+                    platformImage = document.createElement("img");
+                    platformImage.src = '{% static 'admin/img/apple.svg' %}'
+                    platformImage.alt = 'mac'
+                } else if (val === "linux") {
+                    platformImage = document.createElement("img");
+                    platformImage.src = '{% static 'admin/img/linux.svg' %}'
+                    platformImage.alt = 'linux'
+                }
+
+                platformImage.classList.add('os_icon')
+                platforms.appendChild(platformImage)
+            })
+
+            if (parseInt(englishInt) === 0) {
+                englishImage = document.createElement("img")
+                englishImage.src = '{% static 'admin/img/icon-no.svg' %}'
+                englishImage.alt = 'No'
+                englishImage.classList.add('english_image')
+                divEnglish.appendChild(englishImage)
+
+            } else if (parseInt(englishInt) === 1) {
+                englishImage = document.createElement("img")
+                englishImage.src = '{% static 'admin/img/icon-yes.svg' %}'
+                englishImage.alt = 'Yes'
+                englishImage.classList.add('english_image')
+                divEnglish.appendChild(englishImage)
+            }
+
+
+            {#Adding classes to elements for the styling#}
+            div.classList.add('perItem')
+            divNameId.classList.add('divNameId')
+            divLikeDislike.classList.add('divLikeDislike')
+            divPlatformsPrice.classList.add('div_bottom')
+            divEnglish.classList.add('div_english', 'table_item')
+            name.classList.add('dictitem', 'name')
+            appid.classList.add('dictitem', 'appid')
+            release_date.classList.add('dictitem', 'release_date')
+            developer.classList.add('dictitem', 'developer', 'table_item')
+            publisher.classList.add('dictitem', 'publisher', 'table_item')
+            required_age.classList.add('dictitem', 'required_age', 'table_item')
+            categories.classList.add('dictitem', 'categories', 'table_item')
+            genres.classList.add('dictitem', 'genres', 'table_item')
+            steamspy_tags.classList.add('dictitem', 'steamspy_tags', 'table_item')
+            achievements.classList.add('dictitem', 'achivements', 'table_item')
+            average_playtime.classList.add('dictitem', 'average_playtime', 'table_item')
+            median_playtime.classList.add('dictitem', 'median_playtime', 'table_item')
+            owners.classList.add('dictitem', 'owners', 'table_item')
+            positive_ratings.classList.add('dictitem', 'positive_ratings')
+            negative_ratings.classList.add('dictitem', 'negative_ratings')
+            platforms.classList.add('dictitem', 'platforms')
+            price.classList.add('dictitem', 'price')
+
+            tdDivEnglish.appendChild(divEnglish)
+
+            divNameId.appendChild(name)
+            divNameId.appendChild(appid)
+
+            rowdeveloper = document.createElement("TR")
+            rowpublisher = document.createElement("TR")
+            rowenglishLabel = document.createElement("TR")
+            rowrequired_age = document.createElement("TR")
+            rowcategories = document.createElement("TR")
+            rowgenres = document.createElement("TR")
+            rowsteamspy_tags = document.createElement("TR")
+            rowachievements = document.createElement("TR")
+            rowaverage_playtime = document.createElement("TR")
+            rowmedian_playtime = document.createElement("TR")
+            rowowners = document.createElement("TR")
+
+
+            labeldeveloper = document.createElement("TD")
+            labelpublisher = document.createElement("TD")
+            labelenglishLabel = document.createElement("TD")
+            labelrequired_age = document.createElement("TD")
+            labelcategories = document.createElement("TD")
+            labelgenres = document.createElement("TD")
+            labelsteamspy_tags = document.createElement("TD")
+            labelachievements = document.createElement("TD")
+            labelaverage_playtime = document.createElement("TD")
+            labelmedian_playtime = document.createElement("TD")
+            labelowners = document.createElement("TD")
+
+            labeldeveloper.innerText = "Developer "
+            labelpublisher.innerText = "Publisher "
+            labelenglishLabel.innerText = "English "
+            labelrequired_age.innerText = "Required age "
+            labelcategories.innerText = "Categories "
+            labelgenres.innerText = "Genres "
+            labelsteamspy_tags.innerText = "SteamSpy tags"
+            labelachievements.innerText = "Achievements "
+            labelaverage_playtime.innerText = "Average playtime "
+            labelmedian_playtime.innerText = "Median playtime "
+            labelowners.innerText = "Owners "
+
+            rowdeveloper.appendChild(labeldeveloper)
+            rowpublisher.appendChild(labelpublisher)
+            rowenglishLabel.appendChild(labelenglishLabel)
+            rowrequired_age.appendChild(labelrequired_age)
+            rowcategories.appendChild(labelcategories)
+            rowgenres.appendChild(labelgenres)
+            rowsteamspy_tags.appendChild(labelsteamspy_tags)
+            rowachievements.appendChild(labelachievements)
+            rowaverage_playtime.appendChild(labelaverage_playtime)
+            rowmedian_playtime.appendChild(labelmedian_playtime)
+            rowowners.appendChild(labelowners)
+
+            rowdeveloper.appendChild(developer)
+            rowpublisher.appendChild(publisher)
+            rowenglishLabel.appendChild(tdDivEnglish)
+            rowrequired_age.appendChild(required_age)
+            rowcategories.appendChild(categories)
+            rowgenres.appendChild(genres)
+            rowsteamspy_tags.appendChild(steamspy_tags)
+            rowachievements.appendChild(achievements)
+            rowaverage_playtime.appendChild(average_playtime)
+            rowmedian_playtime.appendChild(median_playtime)
+            rowowners.appendChild(owners)
+
+
+            divLikeDislike.appendChild(positive_ratings)
+            {#Create image for like and dislike#}
+            likeDislikeImage = document.createElement("img");
+            likeDislikeImage.src = '{% static 'admin/img/like.svg' %}'
+            likeDislikeImage.alt = 'Like and Dislike'
+            likeDislikeImage.classList.add('like_dislike_image')
+            divLikeDislike.appendChild(likeDislikeImage)
+            divLikeDislike.appendChild(negative_ratings)
+
+            divPlatformsPrice.appendChild(platforms)
+            divPlatformsPrice.appendChild(divLikeDislike)
+            divPlatformsPrice.appendChild(price)
+
+            tableCenterItems.appendChild(rowdeveloper)
+            tableCenterItems.appendChild(rowpublisher)
+            tableCenterItems.appendChild(rowenglishLabel)
+            tableCenterItems.appendChild(rowrequired_age)
+            tableCenterItems.appendChild(rowcategories)
+            tableCenterItems.appendChild(rowgenres)
+            tableCenterItems.appendChild(rowsteamspy_tags)
+            tableCenterItems.appendChild(rowachievements)
+            tableCenterItems.appendChild(rowaverage_playtime)
+            tableCenterItems.appendChild(rowmedian_playtime)
+            tableCenterItems.appendChild(rowowners)
+
+            {#Adding all the elements to a main div. This cant be done all at once for some reason..#}
+            div.appendChild(divNameId)
+            div.appendChild(release_date)
+            div.appendChild(tableCenterItems)
+            div.appendChild(divPlatformsPrice)
+
+            {#Appending the div with all the elements to the body#}
             document.body.appendChild(div)
         }
         loader++
