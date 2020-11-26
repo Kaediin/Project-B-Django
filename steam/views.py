@@ -4,6 +4,8 @@ import os
 from django.shortcuts import render
 
 # Create your views here.
+
+# Define all the keys to filer on
 keys = [
     'appid',
     'name',
@@ -25,6 +27,7 @@ keys = [
     'price'
 ]
 
+# open thhe file and load it into JSON
 with open(os.path.abspath('steam.json'), 'r') as f:
     jsonData = json.load(f)
 
@@ -36,29 +39,31 @@ def sort(data_list, key):
     return data_list
 
 
+# Runs on startup and loads the template (unfiltered)
 def index(request):
-    print(type(jsonData))
+
+    # Render template and pass the values on onto it
     return render(request, 'index.html', {
         'keys': keys,
         'data': jsonData,
         'filter': 'none'
     })
 
-
+# Handles the filter request
 def filter(request):
+    # Retrieve the key from the view
     key = request.GET.get('key')
-    data = sort(jsonData, key)
-    value = keys.index(key)
-    print(type(data))
 
+    # Sort the data with the key
+    data = sort(jsonData, key)
+
+    # Retrieve the key index value
+    value = keys.index(key)
+
+    # Render template and pass the values on onto it
     return render(request, 'index.html', {
         'keys': keys,
         'data': data,
         'filter': key,
         'option_value': value
     })
-
-
-def getDataAsDicts(data):
-    dicts = json.loads(data)
-    return dicts
