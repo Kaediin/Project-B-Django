@@ -41,13 +41,13 @@ def sort(data_list, key):
 
 # Runs on startup and loads the template (unfiltered)
 def index(request):
-
     # Render template and pass the values on onto it
     return render(request, 'index.html', {
         'keys': keys,
         'data': jsonData,
         'filter': 'none'
     })
+
 
 # Handles the filter request
 def filter(request):
@@ -59,6 +59,28 @@ def filter(request):
 
     # Retrieve the key index value
     value = keys.index(key)
+
+    # Render template and pass the values on onto it
+    return render(request, 'index.html', {
+        'keys': keys,
+        'data': data,
+        'filter': key,
+        'option_value': value
+    })
+
+
+def reverse(request, key):
+    try:
+        # Sort the data with the key
+        data = sort(jsonData, key)
+        # Retrieve the key index value
+        value = keys.index(key)
+    except:
+        data = jsonData
+        value = None
+
+
+    data.reverse()
 
     # Render template and pass the values on onto it
     return render(request, 'index.html', {
