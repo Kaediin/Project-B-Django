@@ -7,6 +7,9 @@ Het sorteren wordt gedaan in python en het tonen wordt gedaan in HTML met behulp
 Allereerst moet u Django geinstalleerd hebben. Dit kan doormiddel van "pip install Django" te doen in uw terminal.<br>
 Vervolgens, als u het bestand download en uitpakt kunt in de root van het bestand in uw terminal "python manage.py runserver" doen en uw project zal op uw localhost gestart worden.<br>
 Als dit al niet gebeurd kunt u in uw browser (bij voorkeur Google Chrome) in de url-bar uw localhost:8000 intypen en het project staat daar voor u om gebruikt te worden.<br>
+
+<b>Als alternatief kunt u dit invullen in uw urlbalk: http://projectb.kaedin.nl/</b>
+
 <br>
 <b>Dit project is gedaan door:</b><br>
 Kaedin Schouten - 1779004<br>
