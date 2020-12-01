@@ -1,6 +1,6 @@
 # Project-B-Django
 
-In deze repo vindt u een Django Project die op basis van een sorteer algoritme een lijst van Steam games op snelle wijze kan sorteren.
+In deze repo vindt u een Django Project die op basis van een sorteer algoritme een lijst van ca. 27000 Steam games op snelle wijze kan sorteren.
 Het sorteren wordt gedaan in python en het tonen wordt gedaan in HTML met behulp van JS (voor het clonen van de nodes).
 
 <b>Hoe kan ik dit runnen?</b><br>
